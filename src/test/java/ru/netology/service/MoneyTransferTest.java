@@ -22,6 +22,24 @@ public class MoneyTransferTest {
     }
 
     @Test
+    @DisplayName("Перевод суммы превышающий текущего баланса")
+    void trasferimentoDellImportoSuperioreAlSaldo() {
+
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+        var amount = "100000";
+
+        var transferPage = dashboardPage.selectCard(firstCard);
+        dashboardPage = transferPage.makeValidTransfer(amount, secondCard.getCardnumber());
+
+        var actualFirstdBalance = dashboardPage.getCardBalance(firstCard);
+        var actualSecondBalance = dashboardPage.getCardBalance(secondCard);
+
+        assertEquals(10000, actualSecondBalance);
+        assertEquals(10000, actualFirstdBalance);
+    }
+
+    @Test
     @DisplayName("Перевод со второй карты на первую")
     void shouldTransferMoneyFromSecondToFirstCard() {
         var firstCard = DataHelper.getFirstCard();
@@ -66,22 +84,4 @@ public class MoneyTransferTest {
         assertEquals(expectedFirstBalance, actualFirstBalance);
         assertEquals(expectedSecondBalance, actualSecondBalance);
     }
-
-    @Test
-    @DisplayName("Перевод суммы превышающий текущей суммы")
-    void trasferimentoDellImportoSuperioreAlSaldo() {
-        var firstCard = DataHelper.getFirstCard();
-        var secondCard = DataHelper.getSecondCard();
-        var amount = "100000";
-
-        var transferPage = dashboardPage.selectCard(secondCard);
-        dashboardPage = transferPage.makeValidTransfer(amount, firstCard.getCardnumber());
-
-        var actualFirstBalance = dashboardPage.getCardBalance(firstCard);
-        var actualSecondBalance = dashboardPage.getCardBalance(secondCard);
-
-        assertEquals(0, actualFirstBalance);
-        assertEquals(0, actualSecondBalance);
-    }
-
 }
