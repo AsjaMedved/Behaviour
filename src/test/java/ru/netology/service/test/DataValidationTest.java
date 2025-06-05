@@ -1,15 +1,25 @@
-package ru.netology.service;
+package ru.netology.service.test;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import ru.netology.service.data.DataHelper;
+import ru.netology.service.page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class MoneyTransferNegativeTest {
+public class DataValidationTest {
 
     @BeforeEach
     void setup() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        ChromeDriver driver = new ChromeDriver(options);
+
         open("http://localhost:9999");
     }
 
@@ -61,22 +71,6 @@ public class MoneyTransferNegativeTest {
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo.getLogin(), authInfo.getPassword());
-        var invalidCode = DataHelper.getOtherVerificationCodeFor(authInfo);
-        verificationPage.submitWithEmptyCode(invalidCode);
+        verificationPage.submitWithEmptyCode();
     }
-    @Test
-    @DisplayName("пустое поле карты от куда")
-    void campoMappaVuotoDaDoves() {
-
-        var authInfo = DataHelper.getAuthInfo();
-        var loginPage = new LoginPage();
-        var verificationPage = loginPage.validLogin(authInfo.getLogin(), authInfo.getPassword());
-        var validCode = DataHelper.getVerificationCodeFor(authInfo);
-        var dashboardPage = verificationPage.validVerify(validCode);
-
-        var firstCard = DataHelper.getFirstCard();
-        var transferPage = dashboardPage.selectCard(firstCard);
-        dashboardPage = transferPage.campoMappaVuotoDaDove("500");
-    }
-
 }

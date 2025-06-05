@@ -1,8 +1,9 @@
-package ru.netology.service;
+package ru.netology.service.page;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.DisplayName;
+import ru.netology.service.data.DataHelper;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -19,24 +20,25 @@ public class VerificationPage {
         codeField.shouldBe(Condition.visible);
     }
 
-    public DashboardPage validVerify(DataHelper.VerificationCode code) {
-        codeField.setValue(code.getCode());
+    private void Verify(String code) {
+        codeField.setValue(code);
         continueButton.click();
+    }
+
+    public DashboardPage validVerify(DataHelper.VerificationCode code) {
+        Verify(code.getCode());
         return new DashboardPage();
     }
 
     public VerificationPage invalidVerify(DataHelper.VerificationCode code) {
-        codeField.setValue(code.getCode());
-        continueButton.click();
+        Verify(code.getCode());
         errorNotification.shouldBe(Condition.visible).shouldHave(Condition.text("Ошибка! Неверно указан код! Попробуйте ещё раз"));
         return this;
     }
 
-    public VerificationPage submitWithEmptyCode(DataHelper.VerificationCode code) {
-        codeField.setValue("");
-        continueButton.click();
+    public VerificationPage submitWithEmptyCode() {
+        Verify("");
         codeFieldError.shouldBe(Condition.visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
         return this;
     }
-
 }

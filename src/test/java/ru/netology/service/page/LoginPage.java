@@ -1,4 +1,4 @@
-package ru.netology.service;
+package ru.netology.service.page;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
@@ -17,34 +17,31 @@ public class LoginPage {
     private SelenideElement campoVuotosLogin = $("[data-test-id='login'].input_invalid .input__sub");
     private SelenideElement campoVuotosPassword = $("[data-test-id='password'].input_invalid .input__sub");
 
+private void login (String login, String password){
+    loginField.setValue(login);
+    passwordField.setValue(password);
+    buttonField.click();
+}
 
     public VerificationPage validLogin(String login, String password) {
-        loginField.setValue(login);
-        passwordField.setValue(password);
-        buttonField.click();
+        login(login, password);
         return new VerificationPage();
     }
 
     public LoginPage invalidLogin(String login, String password) {
-        loginField.setValue(login);
-        passwordField.setValue(password);
-        buttonField.click();
+        login(login, password);
         error.shouldBe(Condition.visible).shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"));
         return this;
     }
 
     public LoginPage campoVuotoLogin(String password) {
-        loginField.setValue("");
-        passwordField.setValue(password);
-        buttonField.click();
+        login("", password);
         campoVuotosLogin.shouldBe(Condition.visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
         return this;
     }
 
     public LoginPage campoVuotoPassword(String login) {
-        loginField.setValue(login);
-        passwordField.setValue("");
-        buttonField.click();
+        login(login, "");
         campoVuotosPassword.shouldBe(Condition.visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
         return this;
     }

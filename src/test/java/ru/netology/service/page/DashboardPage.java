@@ -1,10 +1,10 @@
-package ru.netology.service;
+package ru.netology.service.page;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import lombok.val;
 import org.junit.jupiter.api.DisplayName;
+import ru.netology.service.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;

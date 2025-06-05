@@ -1,4 +1,4 @@
-package ru.netology.service;
+package ru.netology.service.data;
 
 import lombok.Value;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +33,10 @@ public class DataHelper {
 
     public static CardInfo getSecondCard() {
         return new CardInfo("5559 0000 0000 0002", "0f3f5c2a-249e-4c3d-8287-09f7a039391d");
+    }
+
+    public static CardInfo getOtherCard() {
+        return new CardInfo("5559 0000 0000 0003", "0f3f5c2a-249e-4c3d-8287-09f7a039391d");
     }
 
     @Value

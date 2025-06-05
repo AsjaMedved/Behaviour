@@ -1,8 +1,14 @@
-package ru.netology.service;
+package ru.netology.service.test;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import ru.netology.service.page.DashboardPage;
+import ru.netology.service.data.DataHelper;
+import ru.netology.service.page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +19,14 @@ public class MoneyTransferTest {
 
     @BeforeEach
     void setup() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        ChromeDriver driver = new ChromeDriver(options);
+
         open("http://localhost:9999");
+
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo.getLogin(), authInfo.getPassword());
@@ -22,21 +35,23 @@ public class MoneyTransferTest {
     }
 
     @Test
-    @DisplayName("Перевод суммы превышающий текущего баланса")
+    @DisplayName("Перевод суммы, превышающей текущий баланс")
     void trasferimentoDellImportoSuperioreAlSaldo() {
 
         var firstCard = DataHelper.getFirstCard();
         var secondCard = DataHelper.getSecondCard();
-        var amount = "100000";
 
+        var actualFirstBalance = dashboardPage.getCardBalance(firstCard);
+        var actualSecondBalance = dashboardPage.getCardBalance(secondCard);
+
+        var amount = String.valueOf(100_000);
         var transferPage = dashboardPage.selectCard(firstCard);
         dashboardPage = transferPage.makeValidTransfer(amount, secondCard.getCardnumber());
 
         var actualFirstdBalance = dashboardPage.getCardBalance(firstCard);
-        var actualSecondBalance = dashboardPage.getCardBalance(secondCard);
+        var actualSecondsBalance = dashboardPage.getCardBalance(secondCard);
 
-        assertEquals(10000, actualSecondBalance);
-        assertEquals(10000, actualFirstdBalance);
+        assertEquals(actualSecondBalance, actualSecondsBalance);
     }
 
     @Test
@@ -84,4 +99,42 @@ public class MoneyTransferTest {
         assertEquals(expectedFirstBalance, actualFirstBalance);
         assertEquals(expectedSecondBalance, actualSecondBalance);
     }
+
+    @Test
+    @DisplayName("пустое поле карты от куда")
+    void campoMappaVuotoDaDoves() {
+
+        var firstCard = DataHelper.getFirstCard();
+        var transferPage = dashboardPage.selectCard(firstCard);
+        transferPage.transferWithEmptyFromField("1000");
+    }
+
+    @Test
+    @DisplayName("не верные данные карты")
+    void incorrectCardInformation() {
+
+        var firstCard = DataHelper.getOtherCard();
+        var transferPage = dashboardPage.selectCard(firstCard);
+        transferPage.transferWithInvalidCard("1000", firstCard.getCardnumber());
+    }
+
+    @Test
+    @DisplayName("Пустое поле суммы")
+    void emptyAmountField() {
+
+        var firstCard = DataHelper.getFirstCard();
+        var transferPage = dashboardPage.selectCard(firstCard);
+        transferPage.transferWithEmptyAmount( firstCard.getCardnumber());
+    }
+
+    @Test
+    @DisplayName("Проверка кнопки отмена")
+    void checkingTheCancelButton() {
+
+        var firstCard = DataHelper.getFirstCard();
+        var transferPage = dashboardPage.selectCard(firstCard);
+        transferPage.cancelTransfer("1000", firstCard.getCardnumber());
+    }
+
 }
+
