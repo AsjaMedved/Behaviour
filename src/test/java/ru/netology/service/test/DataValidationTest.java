@@ -14,13 +14,7 @@ public class DataValidationTest {
 
     @BeforeEach
     void setup() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        ChromeDriver driver = new ChromeDriver(options);
-
-        open("http://localhost:9999");
+               open("http://localhost:9999");
     }
 
     @Test

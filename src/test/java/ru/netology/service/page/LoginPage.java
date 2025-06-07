@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.DisplayName;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -17,32 +18,44 @@ public class LoginPage {
     private SelenideElement campoVuotosLogin = $("[data-test-id='login'].input_invalid .input__sub");
     private SelenideElement campoVuotosPassword = $("[data-test-id='password'].input_invalid .input__sub");
 
-private void login (String login, String password){
-    loginField.setValue(login);
-    passwordField.setValue(password);
-    buttonField.click();
-}
+    private void login(String login, String password) {
+        loginField.setValue(login);
+        passwordField.setValue(password);
+        buttonField.click();
+    }
 
     public VerificationPage validLogin(String login, String password) {
         login(login, password);
         return new VerificationPage();
     }
 
+    private void checkErrorIsVisibleLogin() {
+        campoVuotosLogin.shouldBe(visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
+    }
+
+    private void checkErrorIsVisiblePassword() {
+        campoVuotosPassword.shouldBe(visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
+    }
+
+    private void checkErrorIsVisibleNotification() {
+        error.shouldBe(visible).shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"));
+    }
+
     public LoginPage invalidLogin(String login, String password) {
         login(login, password);
-        error.shouldBe(Condition.visible).shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"));
+        checkErrorIsVisibleNotification();
         return this;
     }
 
     public LoginPage campoVuotoLogin(String password) {
         login("", password);
-        campoVuotosLogin.shouldBe(Condition.visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
+        checkErrorIsVisibleLogin();
         return this;
     }
 
     public LoginPage campoVuotoPassword(String login) {
         login(login, "");
-        campoVuotosPassword.shouldBe(Condition.visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
+        checkErrorIsVisiblePassword();
         return this;
     }
 }

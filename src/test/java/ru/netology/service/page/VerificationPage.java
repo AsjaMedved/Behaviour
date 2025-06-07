@@ -20,24 +20,24 @@ public class VerificationPage {
         codeField.shouldBe(Condition.visible);
     }
 
-    private void Verify(String code) {
+    private void verify(String code) {
         codeField.setValue(code);
         continueButton.click();
     }
 
     public DashboardPage validVerify(DataHelper.VerificationCode code) {
-        Verify(code.getCode());
+        verify(code.getCode());
         return new DashboardPage();
     }
 
     public VerificationPage invalidVerify(DataHelper.VerificationCode code) {
-        Verify(code.getCode());
+        verify(code.getCode());
         errorNotification.shouldBe(Condition.visible).shouldHave(Condition.text("Ошибка! Неверно указан код! Попробуйте ещё раз"));
         return this;
     }
 
     public VerificationPage submitWithEmptyCode() {
-        Verify("");
+        verify("");
         codeFieldError.shouldBe(Condition.visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
         return this;
     }

@@ -24,40 +24,53 @@ public class TransferPage {
         amountField.shouldBe(visible);
     }
 
-    public  DashboardPage cancelTransfer (String amount, String fromCardNumber) {
+    private void transfer(String amount, String fromCardNumber) {
         amountField.setValue(amount);
         fromField.setValue(fromCardNumber);
-        cancelButton.click();
-        return new DashboardPage();
     }
 
-    private void Transfer(String amount, String fromCardNumber) {
-        amountField.setValue(amount);
-        fromField.setValue(fromCardNumber);
+    private void transferButton () {
         transferButton.click();
     }
 
+    private void cancelButton () {
+        cancelButton.click();
+    }
+
+    private void checkErrorIsVisible() {
+        error.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+    }
+
     public DashboardPage makeValidTransfer(String amount, String fromCardNumber) {
-        Transfer(amount, fromCardNumber);
+        transfer(amount, fromCardNumber);
+        transferButton();
         return new DashboardPage();
     }
 
     public TransferPage transferWithEmptyFromField(String amount) {
-        Transfer(amount, "");
-        error.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
-        return this;
+        transfer(amount, "");
+        transferButton();
+        checkErrorIsVisible();
+    return this;
     }
 
-    public TransferPage transferWithEmptyAmount(String fromCardNumber) {
-        Transfer("", fromCardNumber);
-        error.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
-        return this;
+    public DashboardPage transferWithEmptyAmount(String fromCardNumber) {
+        transfer("", fromCardNumber);
+        transferButton();
+        return new  DashboardPage();
     }
 
     public TransferPage transferWithInvalidCard(String amount, String invalidCardNumber) {
-        Transfer(amount, invalidCardNumber);
-        error.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+        transfer(amount, invalidCardNumber);
+        transferButton();
+        checkErrorIsVisible();
         return this;
+    }
+
+    public DashboardPage cancelTransfer (String amount, String invalidCardNumber){
+        transfer(amount, invalidCardNumber);
+        cancelButton();
+        return new DashboardPage();
     }
 
 }

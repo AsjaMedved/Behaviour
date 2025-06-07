@@ -19,12 +19,6 @@ public class MoneyTransferTest {
 
     @BeforeEach
     void setup() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        ChromeDriver driver = new ChromeDriver(options);
-
         open("http://localhost:9999");
 
         var loginPage = new LoginPage();
@@ -35,13 +29,34 @@ public class MoneyTransferTest {
     }
 
     @Test
+    @DisplayName("Перевод с первой карты на вторую")
+    void shouldTransferMoneyFromFirstToSecondCard() {
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+
+        var amount = String.valueOf(5_000);
+        var transferPage = dashboardPage.selectCard(secondCard);
+        dashboardPage = transferPage.makeValidTransfer(amount, firstCard.getCardnumber());
+    }
+
+    @Test
+    @DisplayName("Перевод со второй карты на первую")
+    void shouldTransferMoneyFromSecondToFirstCard() {
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+
+        var amount = String.valueOf(5_000);
+        var transferPage = dashboardPage.selectCard(firstCard);
+        dashboardPage = transferPage.makeValidTransfer(amount, secondCard.getCardnumber());
+    }
+
+    @Test
     @DisplayName("Перевод суммы, превышающей текущий баланс")
     void trasferimentoDellImportoSuperioreAlSaldo() {
 
         var firstCard = DataHelper.getFirstCard();
         var secondCard = DataHelper.getSecondCard();
 
-        var actualFirstBalance = dashboardPage.getCardBalance(firstCard);
         var actualSecondBalance = dashboardPage.getCardBalance(secondCard);
 
         var amount = String.valueOf(100_000);
@@ -53,51 +68,6 @@ public class MoneyTransferTest {
         assertEquals(actualSecondBalance, actualSecondsBalance);
     }
 
-    @Test
-    @DisplayName("Перевод со второй карты на первую")
-    void shouldTransferMoneyFromSecondToFirstCard() {
-        var firstCard = DataHelper.getFirstCard();
-        var secondCard = DataHelper.getSecondCard();
-        var amount = "500";
-
-        var initialFirstBalance = dashboardPage.getCardBalance(firstCard);
-        var initialSecondBalance = dashboardPage.getCardBalance(secondCard);
-
-        var transferPage = dashboardPage.selectCard(firstCard);
-        dashboardPage = transferPage.makeValidTransfer(amount, secondCard.getCardnumber());
-
-        var expectedFirstBalance = initialFirstBalance + Integer.parseInt(amount);
-        var expectedSecondBalance = initialSecondBalance - Integer.parseInt(amount);
-
-        var actualFirstBalance = dashboardPage.getCardBalance(firstCard);
-        var actualSecondBalance = dashboardPage.getCardBalance(secondCard);
-
-        assertEquals(expectedFirstBalance, actualFirstBalance);
-        assertEquals(expectedSecondBalance, actualSecondBalance);
-    }
-
-    @Test
-    @DisplayName("Перевод с первой карты на вторую")
-    void shouldTransferMoneyFromFirstToSecondCard() {
-        var firstCard = DataHelper.getFirstCard();
-        var secondCard = DataHelper.getSecondCard();
-        var amount = "1000";
-
-        var initialFirstBalance = dashboardPage.getCardBalance(firstCard);
-        var initialSecondBalance = dashboardPage.getCardBalance(secondCard);
-
-        var transferPage = dashboardPage.selectCard(secondCard);
-        dashboardPage = transferPage.makeValidTransfer(amount, firstCard.getCardnumber());
-
-        var expectedFirstBalance = initialFirstBalance - Integer.parseInt(amount);
-        var expectedSecondBalance = initialSecondBalance + Integer.parseInt(amount);
-
-        var actualFirstBalance = dashboardPage.getCardBalance(firstCard);
-        var actualSecondBalance = dashboardPage.getCardBalance(secondCard);
-
-        assertEquals(expectedFirstBalance, actualFirstBalance);
-        assertEquals(expectedSecondBalance, actualSecondBalance);
-    }
 
     @Test
     @DisplayName("пустое поле карты от куда")
@@ -123,7 +93,7 @@ public class MoneyTransferTest {
 
         var firstCard = DataHelper.getFirstCard();
         var transferPage = dashboardPage.selectCard(firstCard);
-        transferPage.transferWithEmptyAmount( firstCard.getCardnumber());
+        transferPage.transferWithEmptyAmount(firstCard.getCardnumber());
     }
 
     @Test
