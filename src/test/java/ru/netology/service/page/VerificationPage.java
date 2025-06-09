@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-@DisplayName(" 2. валидная / не валидная верификация проверочного кода")
+@DisplayName(" 2. верификация проверочного кода")
 
 public class VerificationPage {
     private SelenideElement codeField = $("[data-test-id='code'] input");

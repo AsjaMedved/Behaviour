@@ -10,9 +10,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-@DisplayName(" 3. страница со списком карт" +
-        "Получение баланса карт" +
-        "проверка кнопок 'пополнить'")
+@DisplayName(" 3. список карт'")
 
 public class DashboardPage {
 

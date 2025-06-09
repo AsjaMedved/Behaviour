@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-@DisplayName(" 1. валидный / не валидный ввод логин пароль")
+@DisplayName(" 1. ввод логин/пароль")
 
 public class LoginPage {
     private SelenideElement loginField = $("[data-test-id='login'] input");

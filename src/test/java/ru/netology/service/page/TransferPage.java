@@ -8,9 +8,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-@DisplayName(" 4. страница перевода" +
-        "перевод баланса между картами" +
-        "сообщния об ошибке")
+@DisplayName(" 4. перевод денежных средств")
 
 public class TransferPage {
 
