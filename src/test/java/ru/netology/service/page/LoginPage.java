@@ -18,7 +18,7 @@ public class LoginPage {
     private SelenideElement campoVuotosLogin = $("[data-test-id='login'].input_invalid .input__sub");
     private SelenideElement campoVuotosPassword = $("[data-test-id='password'].input_invalid .input__sub");
 
-    private void login(String login, String password) {
+    public void login(String login, String password) {
         loginField.setValue(login);
         passwordField.setValue(password);
         buttonField.click();
@@ -29,33 +29,15 @@ public class LoginPage {
         return new VerificationPage();
     }
 
-    private void checkErrorIsVisibleLogin() {
+    public void checkErrorIsVisibleLogin() {
         campoVuotosLogin.shouldBe(visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
     }
 
-    private void checkErrorIsVisiblePassword() {
+    public void checkErrorIsVisiblePassword() {
         campoVuotosPassword.shouldBe(visible).shouldHave(Condition.text("Поле обязательно для заполнения"));
     }
 
-    private void checkErrorIsVisibleNotification() {
+    public void checkErrorIsVisibleNotification() {
         error.shouldBe(visible).shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"));
-    }
-
-    public LoginPage invalidLogin(String login, String password) {
-        login(login, password);
-        checkErrorIsVisibleNotification();
-        return this;
-    }
-
-    public LoginPage campoVuotoLogin(String password) {
-        login("", password);
-        checkErrorIsVisibleLogin();
-        return this;
-    }
-
-    public LoginPage campoVuotoPassword(String login) {
-        login(login, "");
-        checkErrorIsVisiblePassword();
-        return this;
     }
 }

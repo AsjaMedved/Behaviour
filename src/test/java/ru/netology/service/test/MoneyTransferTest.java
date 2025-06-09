@@ -94,14 +94,15 @@ public class MoneyTransferTest {
 
     }
 
-
     @Test
     @DisplayName("пустое поле карты от куда")
     void campoMappaVuotoDaDoves() {
 
         var firstCard = DataHelper.getFirstCard();
         var transferPage = dashboardPage.selectCard(firstCard);
-        transferPage.transferWithEmptyFromField("1000");
+        transferPage.makeValidTransfer("1000", "");
+        transferPage.checkErrorIsVisible();
+
     }
 
     @Test
@@ -110,7 +111,9 @@ public class MoneyTransferTest {
 
         var firstCard = DataHelper.getOtherCard();
         var transferPage = dashboardPage.selectCard(firstCard);
-        transferPage.transferWithInvalidCard("1000", firstCard.getCardnumber());
+        transferPage.makeValidTransfer("1000", firstCard.getCardnumber());
+        transferPage.checkErrorIsVisible();
+
     }
 
     @Test
@@ -119,7 +122,7 @@ public class MoneyTransferTest {
 
         var firstCard = DataHelper.getFirstCard();
         var transferPage = dashboardPage.selectCard(firstCard);
-        transferPage.transferWithEmptyAmount(firstCard.getCardnumber());
+        transferPage.makeValidTransfer("", firstCard.getCardnumber());
     }
 
     @Test
@@ -127,9 +130,9 @@ public class MoneyTransferTest {
     void checkingTheCancelButton() {
 
         var firstCard = DataHelper.getFirstCard();
-        var transferPage = dashboardPage.selectCard(firstCard);
-        transferPage.cancelTransfer("1000", firstCard.getCardnumber());
-    }
-
+        var transferPages = dashboardPage.selectCard(firstCard);
+        transferPages.transfer("1000", firstCard.getCardnumber());
+        transferPages.cancelButton();
+            }
 }
 

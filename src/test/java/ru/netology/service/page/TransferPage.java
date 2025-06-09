@@ -24,20 +24,20 @@ public class TransferPage {
         amountField.shouldBe(visible);
     }
 
-    private void transfer(String amount, String fromCardNumber) {
+    public void transfer(String amount, String fromCardNumber) {
         amountField.setValue(amount);
         fromField.setValue(fromCardNumber);
     }
 
     private void transferButton () {
-        transferButton.click();
+                transferButton.click();
     }
 
-    private void cancelButton () {
-        cancelButton.click();
+    public void cancelButton () {
+                cancelButton.click();
     }
 
-    private void checkErrorIsVisible() {
+    public void checkErrorIsVisible() {
         error.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
     }
 
@@ -47,29 +47,19 @@ public class TransferPage {
         return new DashboardPage();
     }
 
-    public TransferPage transferWithEmptyFromField(String amount) {
-        transfer(amount, "");
-        transferButton();
-        checkErrorIsVisible();
-    return this;
-    }
 
-    public DashboardPage transferWithEmptyAmount(String fromCardNumber) {
-        transfer("", fromCardNumber);
-        transferButton();
-        return new  DashboardPage();
-    }
 
-    public TransferPage transferWithInvalidCard(String amount, String invalidCardNumber) {
-        transfer(amount, invalidCardNumber);
-        transferButton();
-        checkErrorIsVisible();
-        return this;
-    }
-
-    public DashboardPage cancelTransfer (String amount, String invalidCardNumber){
-        transfer(amount, invalidCardNumber);
-        cancelButton();
-        return new DashboardPage();
-    }
+//
+//    public TransferPage makeTransferExpectingError(String amount, String fromCardNumber) {
+//        transfer(amount, fromCardNumber);
+//        transferButton();
+//        checkErrorIsVisible();
+//        return this;
+//    }
+//
+//    public DashboardPage cancelTransfer(String amount, String fromCardNumber) {
+//        transfer(amount, fromCardNumber);
+//        cancelButton();
+//        return new DashboardPage();
+//    }
 }
