@@ -72,5 +72,4 @@ public class TransferPage {
         cancelButton();
         return new DashboardPage();
     }
-
 }
